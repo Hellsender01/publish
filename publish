@@ -1,0 +1,190 @@
+#!/bin/python3
+
+import sys
+import os
+import datetime
+
+class style():
+	RED = '\033[31m'
+	GREEN = '\033[32m'
+	YELLOW = '\033[33m'
+	BLUE = '\033[34m'
+	RESET = '\033[0m'
+	MAGENTA = '\033[35m'
+	UNDERLINE = '\033[4m'
+	WHITE = '\033[37m'
+	VIOLET = '\33[36m'
+
+def publish():
+	print(style.YELLOW + "-" * 70 + style.RED + '\033[1m' + """
+	  _____  _    _ ____  _      _____  _____ _    _ 
+	 |  __ \| |  | |  _ \| |    |_   _|/ ____| |  | |
+	 | |__) | |  | | |_) | |      | | | (___ | |__| |
+	 |  ___/| |  | |  _ <| |      | |  \___ \|  __  |
+	 | |    | |__| | |_) | |____ _| |_ ____) | |  | |
+	 |_|     \____/|____/|______|_____|_____/|_|  |_|
+						""" + style.RESET + style.WHITE + """BY - Harshit Joshi
+
+""" + style.YELLOW + "-" * 70 + style.WHITE + "\n")
+
+def error():
+	os.system("clear")
+	publish()
+	print(style.RESET + style.WHITE + "The Follwoing Options Are Required http,apache,ftp \n")
+	print("publish -h or --help for more help\n")
+	sys.exit()
+
+if len(sys.argv) == 1:
+	error()
+
+if sys.argv[1] == "--help" or sys.argv[1] == "-h":
+	os.system("clear")
+	publish()
+	print("""
+
+  Info --                     This tool is developed for publishing http,apache,ftp server
+                              on local network with hosting files and folder in Linux and it
+                              can be used with different options which make it more flexible
+
+  Usage --                    publish <service> <options>
+
+  -h or --help -              Display help and exit
+
+  http -                      To start Http server on terminal loaction 
+  Options 
+
+  <port> -                    Port number to which HTTP server is to be hosted(Default 60)
+  <folder> -                  path for folder which is to be hosted
+
+  Examples --                 publish http
+                              publish http 8080
+                              publish http 6789 /root/Desktop/
+
+  apache -                    To start APACHE server and exit
+  Options
+
+  <path> -                    File/Folder to be hosted on server(Default Apache debian webpage)
+  <stop> -                    To stop apache server and exit
+
+  Examples --                 publish apache
+                              publish apache /root/Desktop
+                              publish apache /tmp/password.txt
+
+  ftp -                       To start ftp server
+  Options
+
+  <port>                      Port number at which FTP server is to be hosted(Default 21)
+  <path>                      File/Folder to be hosted on server(* No Default)
+  <username>                  Username for FTP login(Default user)
+  <password>                  Password for FTP login(Default user)
+
+  FTP Usage --                publish ftp <path>
+                              publish ftp <port> <path> <username> <password>
+
+  Examples --                 publish ftp /tmp/
+                              publish ftp 31 /root/Downloads admin password
+                              publish ftp 4444 /root/Desktop/mail.txt
+
+  Developer --                This tool is developed by Harshit Joshi
+                              12th grade student in india and a learner
+                              of Ethical Hacking.\n""")
+
+if len(sys.argv) == 3:
+	port = sys.argv[2]
+
+if sys.argv[1] == "http":
+	try:
+		if len(sys.argv) == 4:
+			os.system("clear")
+			publish()
+			print("\n" + '\033[1m' + style.RED + "[" + style.GREEN + "+" + style.RED + "]" + style.RESET + " Started " + style.BLUE + "HTTP" + style.RESET + " Server On Port " + style.MAGENTA + '\033[1m' + sys.argv[2] + style.RESET + "... Hosting " + style.UNDERLINE + "%s" % sys.argv[3] + style.RESET+ "\n")
+			print("Server started on : " + style.VIOLET + '\033[1m' + "%s" % datetime.datetime.now().time() + style.RESET + "\n")
+			print("Press Ctrl + C to stop server\n")
+			command = ("cd %s " % sys.argv[3]+"&& python -m SimpleHTTPServer " + sys.argv[2])
+			os.system(command)
+		elif len(sys.argv) == 3:
+			os.system("clear")
+			publish()
+			print("\n" + '\033[1m' + style.RED + "[" + style.GREEN + "+" + style.RED + "]" + style.RESET + " Started " + style.BLUE + "HTTP" + style.RESET + " Server On Port " + style.MAGENTA + '\033[1m' + port + style.RESET + "... \n")
+			print("Server started on : " + style.VIOLET + '\033[1m' + "%s" % datetime.datetime.now().time() + style.RESET + "\n")
+			print("Press Ctrl + C to stop server\n")
+			os.system("python -m SimpleHTTPServer " + port)
+		else:
+			os.system("clear")
+			publish()
+			print("\n" + '\033[1m' + style.RED + "[" + style.GREEN + "+" + style.RED + "]" + style.RESET + " Started " + style.BLUE + "HTTP" + style.RESET + " Server On Port " + style.MAGENTA + '\033[1m' + "60" + style.RESET + "... \n")
+			print("Server started on : " + style.VIOLET + '\033[1m' + "%s" % datetime.datetime.now().time() + style.RESET + "\n")
+			print("Press Ctrl + C to stop server\n")
+			os.system("python -m SimpleHTTPServer 60")
+	except:
+		error()
+		print("""Usage --> 3 different syntax
+		1. publish http
+		2. publish http <port>
+		3. publish http <port> <Folder path>\n""")
+
+elif sys.argv[1] == "apache":
+	try:
+		if len(sys.argv) == 3:
+			try:
+				os.system("cp -r %s /var/www/html" % sys.argv[2])
+				os.system("service apache2 start")
+				os.system("clear")
+				publish()
+				rep = sys.argv[2]
+				if rep[-1] == "/":
+					rep = rep[0:-1]
+				filename = os.path.basename(rep)
+				print("\n" + '\033[1m' + style.RED + "[" + style.GREEN + "+" + style.RED + "]" + style.RESET + " Started " + style.BLUE + "APACHE" + style.RESET + " Server On Port " + style.MAGENTA + '\033[1m' + "80" + style.RESET + "... Your Filepath " + style.UNDERLINE + "http://127.0.0.1/%s\n" % filename + style.RESET)
+				print("Server started on : " + style.VIOLET + '\033[1m' + "%s" % datetime.datetime.now().time() + style.RESET + "\n")
+				print("Press Ctrl + C to stop server\n")
+				stop = input("")
+			except KeyboardInterrupt:
+				os.system("service apache2 stop")
+				var_file = ("/var/www/html/"+filename)
+				if os.path.exists(var_file):
+					if os.path.isfile(var_file):
+						os.remove(var_file)
+					else:
+						os.system("rm -rf %s" % var_file)
+				print("\n" + '\033[1m' + style.RED + "[" + style.GREEN + "+" + style.RED + "]" + style.RESET + " Stopped " + style.BLUE + "APACHE" + style.RESET + " Server \n" + style.RESET)
+				print("Server stopped on : " + style.VIOLET + '\033[1m' + "%s" % datetime.datetime.now().time() + style.RESET + "\n")
+		else:
+			try:
+				os.system("service apache2 start")
+				os.system("clear")
+				publish()
+				print("\n" + '\033[1m' + style.RED + "[" + style.GREEN + "+" + style.RED + "]" + style.RESET + " Started " + style.BLUE + "APACHE" + style.RESET + " Server On Port " + style.MAGENTA + '\033[1m' + "80" + style.RESET + "... \n")
+				print("Server started on : " + style.VIOLET + '\033[1m' + "%s" % datetime.datetime.now().time() + style.RESET + "\n")
+				print("Press Ctrl + C to stop server\n")
+				stop = input("")
+			except KeyboardInterrupt:
+				os.system("service apache2 stop")
+				print("\n" + '\033[1m' + style.RED + "[" + style.GREEN + "+" + style.RED + "]" + style.RESET + " Stopped " + style.BLUE + "APACHE" + style.RESET + " Server \n" + style.RESET)
+				print("Server stopped on : " + style.VIOLET + '\033[1m' + "%s" % datetime.datetime.now().time() + style.RESET + "\n")
+	except:
+		error()
+		print("""Usage --> 2 differnt syntax
+		1. publish apache
+		2. publish http <file/folder path>\n""")
+elif sys.argv[1] == "ftp":
+	try:
+		if len(sys.argv) == 6:
+			os.system("clear")
+			publish()
+			print("\n" + '\033[1m' + style.RED + "[" + style.GREEN + "+" + style.RED + "]" + style.RESET + " Started " + style.BLUE + "FTP" + style.RESET + " Server On Port " + style.MAGENTA + '\033[1m' +sys.argv[2] + style.RESET + "... Hosting " + style.UNDERLINE + "%s" % sys.argv[3] + style.RESET + " With Username = " + style.YELLOW + '\033[1m' + sys.argv[4] + style.RESET + " And Password = " + style.YELLOW + '\033[1m' + sys.argv[5] + style.RESET + '\n')
+			print("Server started on : " + style.VIOLET + '\033[1m' + "%s" % datetime.datetime.now().time() + style.RESET + "\n")
+			print("Press Ctrl + C to stop server\n")
+			os.system("python3 -m pyftpdlib -p %s -d %s -u %s -P %s" % (sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]))
+		elif len(sys.argv) == 3:
+			os.system("clear")
+			publish()
+			print("\n" + '\033[1m' + style.RED + "[" + style.GREEN + "+" + style.RED + "]" + style.RESET + " Started " + style.BLUE + "FTP" + style.RESET + " Server On Port " + style.MAGENTA + '\033[1m' + "21" + style.RESET + "... Hosting " + style.UNDERLINE + "%s" %sys.argv[2] + style.RESET + " With Username = " + style.YELLOW + '\033[1m' + "user" + style.RESET + " And Password = " + style.YELLOW + '\033[1m' + "user" + style.RESET + '\n')
+			print("Server started on : " + style.VIOLET + '\033[1m' + "%s" % datetime.datetime.now().time() + style.RESET + "\n")
+			print("Press Ctrl + C to stop server\n")
+			os.system("python3 -m pyftpdlib -p 21 -d %s -u user -P user" % sys.argv[2])
+	except:
+		error()
+		print("""Usage --> 2 different syntax
+		1. publish ftp <file/folder path>
+		2. publish ftp <port> <File/Folder path> <username> <password>\n""")
